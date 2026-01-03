@@ -12,11 +12,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
-// Serve Static Files (Public)
-app.use(express.static(__dirname));
-
 // ===================================
-// 🛡️ SECURITY MIDDLEWARE (Engine)
+// 🛡️ SECURITY MIDDLEWARE (Engine) - MUST BE BEFORE STATIC
 // ===================================
 app.use('/lib', (req, res, next) => {
     // Only protect FFmpeg core files
@@ -36,6 +33,24 @@ app.use('/lib', express.static(path.join(__dirname, 'lib'), {
     immutable: true
 }));
 
+// Serve other Static Files (Public) - AFTER /lib protection
+app.use(express.static(__dirname));
+
+// ===================================
+// 🔍 DEBUGGING: Check files on startup
+// ===================================
+// Helper to debug file existence
+const fs = require('fs');
+try {
+    const libPath = path.join(__dirname, 'lib');
+    if (fs.existsSync(libPath)) {
+        console.log("📂 Lib Directory Contents:", fs.readdirSync(libPath));
+    } else {
+        console.error("❌ 'lib' directory DOES NOT EXIST. Build script might have failed.");
+    }
+} catch (e) {
+    console.error("Debug Error:", e);
+}
 
 // ===================================
 // 🔑 API ROUTES (Shared Logic)
