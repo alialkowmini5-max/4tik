@@ -13,6 +13,15 @@ app.use(cookieParser());
 app.use(cors());
 
 // ===================================
+// 🌍 SHARED ARRAY BUFFER HEADERS (Required for FFmpeg.wasm)
+// ===================================
+app.use((req, res, next) => {
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+    res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+    next();
+});
+
+// ===================================
 // 🛡️ SECURITY MIDDLEWARE (Engine) - MUST BE BEFORE STATIC
 // ===================================
 app.use('/lib', (req, res, next) => {
