@@ -2,7 +2,7 @@
     "name": "flowtik",
     "version": "1.0.0",
     "description": "FlowTik Video Processor",
-    "main": "index.html",
+    "main": "server.js",
     "scripts": {
         "start": "node server.js",
         "build": "node scripts/copy-ffmpeg.js"
